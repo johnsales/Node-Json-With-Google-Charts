@@ -1,5 +1,6 @@
-# NodeJS-CRUD-JSON-app
-Simply app whitch helps me learn nodejs
+# NodeJS-CRUD-With-Google-Charts
+Simply app whitch helps me use google graphs
 
-http://localhost:8081/index.html
-http://localhost:8081/list
+http://localhost:8081/login.html
+user: admin
+password: admin
