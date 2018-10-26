@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<title>Fans</title>
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-light-blue.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+<body>
+<!-- Header -->
+<header class="w3-container w3-theme w3-padding" id="myHeader">
+
+ <a class="w3-text-white w3-right w3-tooltip" href="/logout" title="Sair"><span title="Sair"><i class="fas fa-sign-out-alt"></i></span></a>
+  <div class="w3-center">
+
+
+  <h1 class="w3-xxxlarge w3-animate-bottom">Soccer Team Supporters <img src='./imagens/cbf.png' height="80" width="60" /></h1>
+    <div class="w3-padding-32">
+      <button class="w3-btn w3-xlarge w3-blue w3-hover-light-grey" onclick="document.getElementById('id01').style.display='block'" style="font-weight:900;">New Fan</button>
+    </div>  
+  </div>
+</header>
+
+<!-- Modal -->
+<div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-top">
+      <header class="w3-container w3-theme-l1"> 
+        <span onclick="document.getElementById('id01').style.display='none'"
+        class="w3-button w3-display-topright"> X </span>
+        <h4>Register your cheer here</h4>
+      </header>
+	  <div class="w3-padding">
+		<div class="w3-row-padding">
+		<form id="myform" class="w3-container w3-card-4" action="/add" method="POST">
+		  <h2>Form</h2>
+		  
+		  <div class="w3-section"> 
+		  <label>Team</label>
+      <select class="w3-select w3-border" name="team">
+        <option value="" disabled selected>Choose your team</option>
+        <option value="Atletico-MG">Atlético-MG</option>
+        <option value="Cruzeiro">Cruzeiro</option>
+        <option value="Vasco">Vasco</option>
+        <option value="Flamengo">Flamengo</option>
+        <option value="Sao Paulo">São Paulo</option>
+        <option value="Corinthians">Corinthians</option>
+        <option value="Internacional">Internacional</option>
+        <option value="Gremio">Gremio</option>
+      </select>  
+		  </div>
+
+		  <div class="w3-section">    
+		  <label>Fan Name</label>  
+		    <input id="name" class="w3-input" type="text" required name="name">
+		  </div>
+
+		  <div class="w3-section">     
+		     
+		  <button  type="submit" id="btnCreate" class="w3-btn w3-green w3-border w3-border-black w3-round-large" onclick="document.getElementById('id01').style.display='none'">Salvar</button>
+		  <button class="w3-btn w3-white w3-border w3-round-large" type="reset">Reset</button>
+		  </div>
+
+		</form>
+		</div>
+      </div>
+      <footer class="w3-container w3-theme-l1"></footer>
+    </div>
+</div>
+
+<!-- MY TABLE-->
+<div id="table-wrapper" class="w3-container" onload="List();">
+  <hr>
+  <div class="w3-center">
+    <h2>Fans</h2>
+  </div>
+<div id="table-scroll" class="w3-responsive w3-card-4">
+<table id="tblList" class="w3-table-all"></table>
+</div>
+
+</div>
+
+  <!-- GOOGLE CHARTS -->
+  <script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Team');
+        data.addColumn('number', 'Supporters');
+
+          //Contadores
+          
+          var atleticoMGCount = 0;
+          var cruzeiroCount = 0;
+          var vascoCount = 0;
+          let flamengoCount = 0;
+          var saoPauloCount = 0;
+          var corinthiansCount = 0;
+          var internacionalCount = 0;
+          var gremioCount = 0;
+
+          $.getJSON("./fan.json", function (dataJSON) {
+            $.each(dataJSON.fans, function (index, value) {
+
+              //flamengoCount = dataJSON.filter(x => x.name === "Flamengo").length
+              
+ /*             if(value.team.toLowerCase() === "flamengo"){
+                flamengoCount++;
+                console.log("Entrou no IF do flamengo")
+              }
+
+              console.log("FlamengoCount: "+flamengoCount); 
+              console.log("value: "+value);
+              console.log("value.name: "+value.name);              */
+        //      console.log("value.name: "+value.name);  
+              switch (value.team) {
+                case 'Atletico-MG':
+                    atleticoMGCount++;
+                    break;
+                case 'Cruzeiro':
+                    cruzeiroCount++;
+                    break;
+                case 'Vasco':
+                    vascoCount++;
+                    break;
+                case 'Flamengo':
+                    flamengoCount++;
+                    break;
+                case 'Sao Paulo':
+                    saoPauloCount++;
+                    break;
+                case 'Corinthians':
+                    corinthiansCount++;
+                    break;
+                case 'Internacional':
+                    internacionalCount++;
+                    break;
+                case 'Gremio':
+                    gremioCount++;
+                    break;    
+              }
+           /* var res2 = alasql('SELECT INDEX name, COUNT(*) AS cnt FROM ? GROUP BY name'.
+                      [dataJSON.fans[0].order_contents]);*/
+        
+            });
+
+
+          console.log("flamengoCount 1: "+flamengoCount);        
+
+          });
+            
+          setTimeout(function() { 
+
+            data.addRows([
+                      ['Atlético-MG', atleticoMGCount],
+                      ['Cruzeiro', cruzeiroCount],
+                      ['Vasco', vascoCount],
+                      ['Flamengo', flamengoCount],
+                      ['São Paulo', saoPauloCount],
+                      ['Corinthians', corinthiansCount],
+                      ['Internacional', internacionalCount],
+                      ['Grêmio', gremioCount]
+                    ]); 
+        
+        // Set chart options
+        var options = {'title':'Distribution of Fans Per Team',
+                       'width':600,
+                       'height':500};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+        },
+
+      1000);
+      }
+    </script>
+    <br>
+     <!--Div that will hold the pie chart-->
+    <div id="chart_div" align="center""></div>
+<br>
+<!-- Footer -->
+<footer class="w3-container w3-theme-dark w3-padding-16">
+  <p>Aluno: <strong>Johnathan Santiago</strong></p>
+  <p>Professor: <strong>Jair Leite</strong></p>
+  <div style="position:relative;bottom:55px;" class="w3-tooltip w3-right">
+    <img src = "./imagens/imd-logo.png"   width="350" height="60"
+                 alt = "imd"  />
+    <a class="w3-text-white" href="#myHeader"><span class="w3-xlarge" title="GO TO TOP">
+    <i class="fa fa-chevron-circle-up"></i></span></a>
+
+  </div>
+
+</footer>
+
+<script type="text/javascript">
+  
+  //Montagem da tabela
+  $("#tblList").html("");
+    $("#tblList").html(
+            "<thead>" +
+            "<tr class='w3-theme'>" +                
+            "<th>Team</th>" +
+            "<th>Fan Name</th>" +
+            "<th>Ações</th>" +
+            "</tr>" +
+            "</thead>" +
+            "<tbody>" +
+            "</tbody>"
+            ); //Agregar a tabela a estructura HTML
+
+    $.getJSON("./fan.json", function (data) {
+    $.each(data.fans, function (index, value) {
+    
+        var f = value;
+        $("#tblList tbody").append("<tr>" +                    
+                "<td>" + f.team + "</td>" +
+                "<td>" + f.name + "</td>" +                  
+                "<td>  <img src='./imagens/delete.png' alt='Delete" + index + "' class='btnDelete' onclick='Delete();'/></td>" +
+                "</tr>"
+                );
+      });
+    });
+    
+    //TODO Edit<img src='./imagens/edit.png' alt='Edit" + index + "' class='btnEdit' onclick='FillFields();' /> &nbsp &nbsp
+
+    function Delete() {
+    $('#tblList tr').each(function(indx, val) {
+      $(this).click(function() {
+        selected_index = $(this).index();
+        var result = confirm("Are you sure you want to delete the item "+ selected_index +" ?");
+        if (result) {
+
+          $.getJSON("./fan.json", function (data) {
+            $.each(data.fans, function (index, value) {
+            //Excluir o elemento selecionado da tabela
+            if(index == selected_index){
+              //var objectRemoved = data.fans[index];
+            //  data.fans.splice(index);
+              $.ajax({
+                url: '/delete',
+                method: 'GET',
+                data: 'id=' +selected_index
+              });
+              //here to save in json
+              alert("Fan deleted successfully!"); //Mensagem de alerta
+            } 
+
+            location.reload();
+            });
+          });
+        }
+      })
+    })  
+  }
+
+</script>
+
+</body>
+</html>
